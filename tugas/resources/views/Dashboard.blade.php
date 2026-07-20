@@ -1,206 +1,113 @@
 <x-app-layout>
 
     <x-slot name="header">
-        <h2 class="font-semibold text-2xl text-gray-800 leading-tight">
-            {{ __('Dashboard Admin') }}
+        <h2 class="font-semibold text-2xl text-gray-800">
+            Dashboard Admin
         </h2>
     </x-slot>
 
-
-    <div class="py-12 bg-gray-100 min-h-screen">
-
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+  <!-- Welcome Card -->
+<div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200 mb-8">
 
 
-            <!-- Welcome Card -->
-            <div class="bg-white shadow-lg rounded-xl p-8 mb-8">
+    <!-- Content -->
+    <div class="px-8 py-6">
 
-                <h1 class="text-3xl font-bold text-gray-800 mb-3">
-                    Dashboard Admin LMS
-                </h1>
-
-                <p class="text-gray-600 text-lg">
-                    Selamat datang,
-                    <span class="font-semibold text-blue-600">
-                        {{ auth()->user()->name }}
-                    </span>
-                </p>
-
-                <p class="mt-2 text-gray-500">
-                    Kelola kategori dan kursus pembelajaran melalui menu di bawah.
-                </p>
-
-            </div>
+        <p class="text-lg text-gray-700">
+            Selamat datang,
+            <span class="font-bold text-blue-700">
+                {{ auth()->user()->name }}
+            </span>
+        </p>
 
 
+        <p class="mt-3 text-gray-500">
+            Kelola kategori, kursus, dan enrollment melalui dashboard admin.
+        </p>
 
-            <!-- Menu Card -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    </div>
 
+</div>
+<!-- Statistik -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-5">
 
+    <!-- Total Kursus -->
+    <div class="bg-white rounded-xl shadow-md p-5 flex items-center justify-between">
 
-                <!-- Category -->
-                <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition">
+        <div>
+            <p class="text-gray-500 text-base">
+                Total Kursus
+            </p>
 
-                    <div class="flex items-center mb-4">
+            <h2 class="text-3xl font-bold text-blue-600 mt-1">
+                {{ $totalKursus }}
+            </h2>
+        </div>
 
-                        <div class="bg-blue-100 p-3 rounded-full">
+        <div class="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center text-3xl">
+            📚
+        </div>
 
-                            📂
-
-                        </div>
-
-                        <h3 class="ml-4 text-xl font-bold text-gray-800">
-                            Category
-                        </h3>
-
-                    </div>
-
-
-                    <p class="text-gray-600 mb-5">
-                        Tambahkan dan kelola kategori kursus LMS.
-                    </p>
-
-
-                    <a href="{{ route('category.index') }}"
-                       class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg transition">
-
-                        Kelola Category
-
-                    </a>
+    </div>
 
 
-                </div>
+    <!-- Total Kategori -->
+    <div class="bg-white rounded-xl shadow-md p-5 flex items-center justify-between">
 
+        <div>
+            <p class="text-gray-500 text-base">
+                Total Kategori
+            </p>
 
+            <h2 class="text-3xl font-bold text-green-600 mt-1">
+                {{ $totalKategori }}
+            </h2>
+        </div>
 
+        <div class="w-14 h-14 rounded-full bg-green-100 flex kali center justify-center text-3xl">
+            📂
+        </div>
 
-
-                <!-- Kursus -->
-                <div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition">
-
-
-                    <div class="flex items-center mb-4">
-
-                        <div class="bg-green-100 p-3 rounded-full">
-
-                            📚
-
-                        </div>
-
-
-                        <h3 class="ml-4 text-xl font-bold text-gray-800">
-                            Kursus
-                        </h3>
-
-                    </div>
-
-<div class="flex justify-between items-center mb-6">
-
-    <h2 class="text-2xl font-bold text-gray-800">
-        Data Kursus
-    </h2>
-
-
-    <a href="{{ route('kursus.create') }}"
-       class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg">
-
-        + Tambah Kursus
-
-    </a>
+    </div>
 
 </div>
 
 
-
-                </div>
-
-
-
-            </div>
-
-
-
-
-            <!-- Statistik -->
-            <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-
-
-                <div class="bg-white rounded-xl shadow p-6">
-
-                    <h4 class="text-gray-500">
-                        Total Kursus
-                    </h4>
-<p class="text-3xl font-bold text-blue-600">
-    {{ $totalKursus }}
-</p>
-
-                </div>
-
-
-
-                <div class="bg-white rounded-xl shadow p-6">
-
-                    <h4 class="text-gray-500">
-                        Total Kategori
-                    </h4>
-
-                    <p class="text-3xl font-bold text-green-600">
-                     {{ $totalKategori }}
-                    </p>
-
-                </div>
-
-
-
-                <div class="bg-white rounded-xl shadow p-6">
-
-                    <h4 class="text-gray-500">
-                        Status
-                    </h4>
-
-                    <p class="text-xl font-bold text-purple-600">
-                        Aktif
-                    </p>
-
-                </div>
-
-
-            </div>
-
-
-
-        </div>
-
-    </div>
 <!-- Enrollment -->
+<div class="bg-white rounded-xl shadow-md p-5 -mt-2">
 
-<div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition">
+    <div class="flex items-center justify-between">
 
-    <div class="flex items-center mb-4">
+        <div class="flex items-center">
 
-        <div class="bg-purple-100 p-3 rounded-full">
-            📝
+            <div class="bg-purple-100 p-3 rounded-full text-3xl">
+                📝
+            </div>
+
+            <div class="ml-4">
+
+                <h3 class="text-xl font-bold text-gray-800">
+                    Enrollment
+                </h3>
+
+                <p class="text-gray-500 mt-1">
+                    Kelola peserta yang mengikuti kursus.
+                </p>
+
+            </div>
+
         </div>
 
-        <h3 class="ml-4 text-xl font-bold text-gray-800">
-            Enrollment
-        </h3>
+
+        <a href="{{ route('enrollment.index') }}"
+           class="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-6 py-2 rounded-lg">
+
+            Kelola
+
+        </a>
 
     </div>
 
-
-    <p class="text-gray-600 mb-5">
-        Kelola peserta yang mengikuti kursus.
-    </p>
-
-
-    <a href="{{ route('enrollment.index') }}"
-       class="inline-block bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-lg">
-
-        Kelola Enrollment
-
-    </a>
-
 </div>
+
 </x-app-layout>

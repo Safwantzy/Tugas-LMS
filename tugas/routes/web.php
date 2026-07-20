@@ -99,6 +99,19 @@ Route::middleware('auth')->group(function () {
     ->name('profile.destroy');
 
 });
+Route::middleware(['auth','role:admin'])->group(function () {
 
+    Route::get('/admin/dashboard', [
+        AdminDashboard::class, 'index'
+    ])->name('admin.dashboard');
+
+    Route::resource('category', CategoryController::class);
+
+    Route::resource('kursus', KursusController::class);
+
+    Route::get('/enrollment', [
+        EnrollmentController::class, 'index'
+    ])->name('enrollment.index');
+});
 
 require __DIR__.'/auth.php';

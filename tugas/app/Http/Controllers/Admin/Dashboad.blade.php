@@ -12,35 +12,21 @@
         ">
         Category
     </button>
-</a>
-<a href="{{ route('enrollment.index') }}">
-    Kelola Enrollment
-</a>
-<!-- Enrollment -->
-<div class="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition">
+    </a>
 
-    <div class="flex items-center mb-4">
-
-        <div class="bg-purple-100 p-3 rounded-full">
-            📝
-        </div>
-
-        <h3 class="ml-4 text-xl font-bold text-gray-800">
-            Enrollment
-        </h3>
-
-    </div>
-
-
-    <p class="text-gray-600 mb-5">
-        Kelola peserta yang mengikuti kursus.
-    </p>
-
-
+    <!-- Enrollment -->
     <a href="{{ route('enrollment.index') }}"
-       class="inline-block bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-lg">
+       class="bg-purple-600 hover:bg-purple-700 text-white rounded-2xl p-10 text-center shadow-lg transition">
 
-        Kelola Enrollment
+        <div class="text-6xl mb-4">📝</div>
+
+        <h2 class="text-3xl font-bold">
+            Enrollment
+        </h2>
+
+        <p class="mt-3 text-lg">
+            Kelola data enrollment
+        </p>
 
     </a>
 

@@ -97,4 +97,15 @@
             </div>
         </div>
     </div>
+    <x-nav-link :href="route('category.index')" :active="request()->routeIs('category.*')">
+    Kategori
+</x-nav-link>
+
+<x-nav-link :href="route('kursus.index')" :active="request()->routeIs('kursus.*')">
+    Kursus
+</x-nav-link>
+
+<x-nav-link :href="route('enrollment.index')" :active="request()->routeIs('enrollment.*')">
+    Enrollment
+</x-nav-link>
 </nav>
