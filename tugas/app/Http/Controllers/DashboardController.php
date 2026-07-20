@@ -1,15 +1,21 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Models\Kursus;
 
 class DashboardController extends Controller
 {
-
     public function index()
     {
-        return view('admin.dashboard');
-    }
+        $totalKursus = Kursus::count();
 
+        $totalKategori = Kursus::distinct('kategori')
+            ->count('kategori');
+
+        return view('dashboard', compact(
+            'totalKursus',
+            'totalKategori'
+        ));
+    }
 }

@@ -21,19 +21,23 @@ class CategoryController extends Controller
     }
 
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'name'=>'required'
-        ]);
+   public function store(Request $request)
+{
 
-        Category::create([
-            'name'=>$request->name
-        ]);
+    $request->validate([
+        'name'=>'required'
+    ]);
 
-        return redirect('/category');
-    }
 
+    Category::create([
+        'name'=>$request->name
+    ]);
+
+
+    return redirect()
+        ->route('category.index');
+
+}
 
     public function edit(Category $category)
     {

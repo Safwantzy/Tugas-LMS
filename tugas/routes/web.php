@@ -1,14 +1,23 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\Admin\DashboardController as AdminDashboard;
 use App\Http\Controllers\Participant\DashboardController as ParticipantDashboard;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\KursusController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EnrollmentController;
+use App\Http\Controllers\ProfileController;
 
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::resource('kursus', KursusController::class);
+
 
 
 Route::middleware(['auth','role:admin'])
@@ -19,9 +28,17 @@ Route::middleware(['auth','role:admin'])
     )
     ->name('admin.dashboard');
 
+
     Route::resource('category', CategoryController::class);
 
+
+    Route::get('/enrollment',
+        [EnrollmentController::class,'index']
+    )
+    ->name('enrollment.index');
+
 });
+
 
 
 Route::middleware(['auth','role:peserta'])
@@ -35,31 +52,53 @@ Route::middleware(['auth','role:peserta'])
 });
 
 
-Route::view('/dashboard', 'dashboard')
-    ->middleware(['auth'])
-    ->name('dashboard');
+
+Route::get('/dashboard',
+    [DashboardController::class,'index']
+)
+->middleware('auth')
+->name('dashboard');
 
 
-require __DIR__.'/auth.php';
+
+Route::get('/kursus/{kursus}',
+    [KursusController::class,'show']
+)
+->name('kursus.show');
+
+
+
+Route::post('/kursus/{kursus}/enroll',
+    [KursusController::class,'enroll']
+)
+->middleware('auth')
+->name('kursus.enroll');
+
 
 
 Route::middleware('auth')->group(function () {
 
     Route::get('/profile', [
-        App\Http\Controllers\ProfileController::class,
+        ProfileController::class,
         'edit'
-    ])->name('profile.edit');
+    ])
+    ->name('profile.edit');
 
 
     Route::patch('/profile', [
-        App\Http\Controllers\ProfileController::class,
+        ProfileController::class,
         'update'
-    ])->name('profile.update');
+    ])
+    ->name('profile.update');
 
 
     Route::delete('/profile', [
-        App\Http\Controllers\ProfileController::class,
+        ProfileController::class,
         'destroy'
-    ])->name('profile.destroy');
+    ])
+    ->name('profile.destroy');
 
 });
+
+
+require __DIR__.'/auth.php';
