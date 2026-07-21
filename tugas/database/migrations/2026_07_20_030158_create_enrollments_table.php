@@ -31,6 +31,3 @@ return new class extends Migration
         Schema::dropIfExists('enrollments');
     }
 };
-$kursus = \App\Models\Kursus::find(1);
-
-$kursus->peserta()->attach(1);

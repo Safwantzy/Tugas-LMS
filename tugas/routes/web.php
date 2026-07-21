@@ -9,14 +9,12 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\KursusController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\DashboardController;
 
 
 
 Route::get('/', function () {
     return view('welcome');
 });
-
 
 
 /*
@@ -47,7 +45,6 @@ Route::middleware(['auth','role:admin'])->group(function(){
 });
 
 
-
 /*
 |--------------------------------------------------------------------------
 | Peserta
@@ -61,9 +58,7 @@ Route::middleware(['auth','role:peserta'])->group(function(){
     )
     ->name('peserta.dashboard');
 
-
 });
-
 
 
 /*
@@ -72,12 +67,8 @@ Route::middleware(['auth','role:peserta'])->group(function(){
 |--------------------------------------------------------------------------
 */
 
-Route::get('/dashboard',
-    [DashboardController::class,'index']
-)
-->middleware('auth')
-->name('dashboard');
-
+// hapus route DashboardController lama
+// karena admin sudah memakai /admin/dashboard
 
 
 /*
@@ -93,13 +84,11 @@ Route::get('/kursus/{kursus}',
 ->name('kursus.show');
 
 
-
 Route::post('/kursus/{kursus}/enroll',
     [KursusController::class,'enroll']
 )
 ->middleware('auth')
 ->name('kursus.enroll');
-
 
 
 /*
@@ -110,13 +99,11 @@ Route::post('/kursus/{kursus}/enroll',
 
 Route::middleware('auth')->group(function () {
 
-
     Route::get('/profile', [
         ProfileController::class,
         'edit'
     ])
     ->name('profile.edit');
-
 
 
     Route::patch('/profile', [
@@ -126,16 +113,13 @@ Route::middleware('auth')->group(function () {
     ->name('profile.update');
 
 
-
     Route::delete('/profile', [
         ProfileController::class,
         'destroy'
     ])
     ->name('profile.destroy');
 
-
 });
-
 
 
 require __DIR__.'/auth.php';
