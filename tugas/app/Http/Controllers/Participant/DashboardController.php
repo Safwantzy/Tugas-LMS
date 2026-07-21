@@ -3,44 +3,56 @@
 namespace App\Http\Controllers\Participant;
 
 use App\Http\Controllers\Controller;
+use App\Models\Kursus;
+use App\Models\Enrollment;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        $user = auth()->user();
-
-        // Ambil kursus peserta
-        $kelas = $user->kursus;
+        $user = Auth::user();
 
 
-        // Hitung jumlah kursus
-        $totalKelas = $kelas->count();
+        // Jumlah kelas yang tersedia / diikuti
+        $totalKelas = Kursus::count();
 
 
-        // Statistik
+        // Data kursus peserta
+        $kelas = Kursus::whereHas('enrollments', function ($query) use ($user) {
+            $query->where('user_id', $user->id);
+        })->get();
+
+
+
+        // sementara sebelum ada tabel progres
         $materiSelesai = 0;
+
+
+        // sementara sebelum ada tabel tugas
         $tugasBelum = 0;
+
+
+        // sementara sebelum ada tabel nilai
         $nilaiRata = 0;
 
 
-        // Data tugas
+
+        // sementara data kosong
         $tugas = collect();
 
-
-        // Data pengumuman
         $pengumuman = collect();
 
 
 
-        return view('peserta.dashboard', [
-            'kelas' => $kelas,
-            'totalKelas' => $totalKelas,
-            'materiSelesai' => $materiSelesai,
-            'tugasBelum' => $tugasBelum,
-            'nilaiRata' => $nilaiRata,
-            'tugas' => $tugas,
-            'pengumuman' => $pengumuman,
-        ]);
+        return view('peserta.Dashboard', compact(
+            'totalKelas',
+            'materiSelesai',
+            'tugasBelum',
+            'nilaiRata',
+            'kelas',
+            'tugas',
+            'pengumuman'
+        ));
     }
 }

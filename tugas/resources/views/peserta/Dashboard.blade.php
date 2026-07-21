@@ -1,107 +1,110 @@
-{{-- resources/views/peserta/dashboard.blade.php --}}
-@extends('layouts.app')
+<x-app-layout>
 
-@section('title', 'Dashboard Peserta')
+    <div class="max-w-7xl mx-auto px-6 py-8">
 
-@section('content')
-<div class="container py-4">
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl shadow-lg p-8 text-white mb-8">
+            <h1 class="text-3xl font-bold">
+                Selamat Datang, {{ auth()->user()->name }} 👋
+            </h1>
 
-    <div class="row mb-4">
-        <div class="col-md-12">
-            <div class="card border-0 shadow-sm bg-primary text-white">
-                <div class="card-body">
-                    <h3>Selamat Datang, {{ auth()->user()->name }} 👋</h3>
-                    <p class="mb-0">
-                        Tetap semangat belajar dan selesaikan semua tugas tepat waktu.
-                    </p>
-                </div>
+            <p class="mt-2 text-blue-100">
+                Tetap semangat belajar dan selesaikan semua tugas tepat waktu.
+            </p>
+        </div>
+
+        <!-- Statistik -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+
+            <div class="bg-white rounded-xl shadow p-6 text-center">
+                <div class="text-4xl mb-3">📚</div>
+                <h2 class="text-3xl font-bold text-blue-600">
+                    {{ $totalKelas }}
+                </h2>
+                <p class="text-gray-500 mt-2">
+                    Kelas Diikuti
+                </p>
             </div>
-        </div>
-    </div>
 
-
-    {{-- Statistik --}}
-    <div class="row mb-4">
-
-        <div class="col-md-3">
-            <div class="card shadow-sm border-0">
-                <div class="card-body text-center">
-                    <h2>{{ $totalKelas }}</h2>
-                    <p class="text-muted mb-0">Kelas Diikuti</p>
-                </div>
+            <div class="bg-white rounded-xl shadow p-6 text-center">
+                <div class="text-4xl mb-3">✅</div>
+                <h2 class="text-3xl font-bold text-green-600">
+                    {{ $materiSelesai }}
+                </h2>
+                <p class="text-gray-500 mt-2">
+                    Materi Selesai
+                </p>
             </div>
-        </div>
 
-
-        <div class="col-md-3">
-            <div class="card shadow-sm border-0">
-                <div class="card-body text-center">
-                    <h2>{{ $materiSelesai }}</h2>
-                    <p class="text-muted mb-0">Materi Selesai</p>
-                </div>
+            <div class="bg-white rounded-xl shadow p-6 text-center">
+                <div class="text-4xl mb-3">📝</div>
+                <h2 class="text-3xl font-bold text-red-600">
+                    {{ $tugasBelum }}
+                </h2>
+                <p class="text-gray-500 mt-2">
+                    Tugas Belum
+                </p>
             </div>
-        </div>
 
-
-        <div class="col-md-3">
-            <div class="card shadow-sm border-0">
-                <div class="card-body text-center">
-                    <h2>{{ $tugasBelum }}</h2>
-                    <p class="text-muted mb-0">Tugas Belum Dikerjakan</p>
-                </div>
+            <div class="bg-white rounded-xl shadow p-6 text-center">
+                <div class="text-4xl mb-3">⭐</div>
+                <h2 class="text-3xl font-bold text-purple-600">
+                    {{ $nilaiRata }}
+                </h2>
+                <p class="text-gray-500 mt-2">
+                    Nilai Rata-rata
+                </p>
             </div>
+
         </div>
 
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-        <div class="col-md-3">
-            <div class="card shadow-sm border-0">
-                <div class="card-body text-center">
-                    <h2>{{ $nilaiRata }}</h2>
-                    <p class="text-muted mb-0">Rata-rata Nilai</p>
-                </div>
-            </div>
-        </div>
+            <!-- Kursus -->
+            <div class="lg:col-span-2">
 
-    </div>
+                <div class="bg-white rounded-xl shadow mb-8">
 
+                    <div class="border-b px-6 py-4">
+                        <h2 class="text-xl font-bold">
+                            Kursus Saya
+                        </h2>
+                    </div>
 
-    <div class="row">
+                    <div class="p-6">
 
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
 
-        {{-- Kelas --}}
-<div class="col-lg-8">
+                            @forelse($kelas as $item)
 
-    <div class="card shadow-sm border-0 mb-4">
+                                <div class="border rounded-xl p-5 hover:shadow-lg transition">
 
-        <div class="card-header bg-white">
-            <h5 class="mb-0">Kursus Saya</h5>
-        </div>
+                                    <h3 class="text-xl font-bold">
+                                        {{ $item->judul }}
+                                    </h3>
 
-        <div class="card-body">
+                                    <p class="text-gray-500 mt-2">
+                                        {{ $item->deskripsi }}
+                                    </p>
 
-            <div class="row">
+                                    <a href="{{ route('kursus.show',$item->id) }}"
+                                       class="inline-block mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
 
-                @forelse($kelas as $item)
+                                        Masuk Kursus
 
-                <div class="col-md-6 mb-3">
+                                    </a>
 
-                    <div class="card h-100 border">
+                                </div>
 
-                        <div class="card-body">
+                            @empty
 
-                            <h5>
-                                {{ $item->judul }}
-                            </h5>
+                                <div class="col-span-2 bg-blue-100 text-blue-700 p-5 rounded-lg">
 
-                            <p class="text-muted">
-                                {{ $item->deskripsi }}
-                            </p>
+                                    Belum mengikuti kursus.
 
+                                </div>
 
-                            <a href="{{ route('kursus.show',$item->id) }}"
-                               class="btn btn-primary btn-sm">
-                                Masuk Kursus
-                            </a>
+                            @endforelse
 
                         </div>
 
@@ -109,226 +112,181 @@
 
                 </div>
 
+                <!-- Tugas -->
+                <div class="bg-white rounded-xl shadow">
 
-                @empty
+                    <div class="border-b px-6 py-4">
+                        <h2 class="text-xl font-bold">
+                            Tugas Terbaru
+                        </h2>
+                    </div>
 
-                <div class="col-12">
+                    <div class="overflow-x-auto">
 
-                    <div class="alert alert-info">
-                        Belum mengikuti kursus.
+                        <table class="min-w-full">
+
+                            <thead class="bg-gray-100">
+
+                                <tr>
+
+                                    <th class="px-6 py-3 text-left">
+                                        Judul
+                                    </th>
+
+                                    <th class="px-6 py-3 text-left">
+                                        Kelas
+                                    </th>
+
+                                    <th class="px-6 py-3 text-left">
+                                        Deadline
+                                    </th>
+
+                                    <th class="px-6 py-3 text-left">
+                                        Status
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                @forelse($tugas as $item)
+
+                                    <tr class="border-b">
+
+                                        <td class="px-6 py-4">
+                                            {{ $item->judul }}
+                                        </td>
+
+                                        <td class="px-6 py-4">
+                                            {{ $item->kelas->nama_kelas ?? '-' }}
+                                        </td>
+
+                                        <td class="px-6 py-4">
+                                            {{ $item->deadline }}
+                                        </td>
+
+                                        <td class="px-6 py-4">
+
+                                            @if($item->status == 'Sudah')
+
+                                                <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full">
+                                                    Sudah
+                                                </span>
+
+                                            @else
+
+                                                <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full">
+                                                    Belum
+                                                </span>
+
+                                            @endif
+
+                                        </td>
+
+                                    </tr>
+
+                                @empty
+
+                                    <tr>
+
+                                        <td colspan="4" class="text-center py-6 text-gray-500">
+
+                                            Tidak ada tugas.
+
+                                        </td>
+
+                                    </tr>
+
+                                @endforelse
+
+                            </tbody>
+
+                        </table>
+
                     </div>
 
                 </div>
 
-                @endforelse
-
-
             </div>
 
-        </div>
+            <!-- Sidebar -->
+            <div>
 
-    </div>
+                <div class="bg-white rounded-xl shadow mb-6">
 
-            {{-- Tugas --}}
-            <div class="card shadow-sm border-0">
+                    <div class="border-b px-6 py-4">
+                        <h2 class="text-xl font-bold">
+                            Pengumuman
+                        </h2>
+                    </div>
 
-                <div class="card-header bg-white">
-                    <h5 class="mb-0">
-                        Tugas Terbaru
-                    </h5>
-                </div>
+                    <div class="p-6">
 
+                        @forelse($pengumuman as $item)
 
-                <div class="table-responsive">
+                            <div class="mb-5">
 
-                    <table class="table table-hover mb-0">
+                                <h3 class="font-semibold">
+                                    {{ $item->judul }}
+                                </h3>
 
-                        <thead>
-                            <tr>
-                                <th>Judul</th>
-                                <th>Kelas</th>
-                                <th>Deadline</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
+                                <p class="text-gray-500 mt-1">
+                                    {{ $item->isi }}
+                                </p>
 
+                                <small class="text-gray-400">
+                                    {{ $item->created_at->format('d M Y') }}
+                                </small>
 
-                        <tbody>
+                            </div>
 
-
-                        @forelse($tugas as $item)
-
-                        <tr>
-
-                            <td>
-                                {{ $item->judul }}
-                            </td>
-
-
-                            <td>
-                                {{ $item->kelas->nama_kelas ?? '-' }}
-                            </td>
-
-
-                            <td>
-                                {{ $item->deadline }}
-                            </td>
-
-
-                            <td>
-
-                                @if($item->status == "Sudah")
-
-                                    <span class="badge bg-success">
-                                        Sudah
-                                    </span>
-
-                                @else
-
-                                    <span class="badge bg-danger">
-                                        Belum
-                                    </span>
-
-                                @endif
-
-                            </td>
-
-
-                        </tr>
-
+                            <hr class="my-4">
 
                         @empty
 
-
-                        <tr>
-
-                            <td colspan="4" class="text-center">
-                                Tidak ada tugas.
-                            </td>
-
-                        </tr>
-
+                            <p class="text-gray-500">
+                                Tidak ada pengumuman.
+                            </p>
 
                         @endforelse
 
-
-                        </tbody>
-
-                    </table>
-
+                    </div>
 
                 </div>
 
-            </div>
+                <div class="bg-white rounded-xl shadow">
 
+                    <div class="border-b px-6 py-4">
+                        <h2 class="text-xl font-bold">
+                            Profil Peserta
+                        </h2>
+                    </div>
 
-        </div>
+                    <div class="p-6 text-center">
 
+                        <img
+                            src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name) }}&background=2563eb&color=fff&size=128"
+                            class="mx-auto rounded-full mb-4"
+                            alt="Avatar">
 
+                        <h3 class="text-xl font-bold">
+                            {{ auth()->user()->name }}
+                        </h3>
 
-
-        {{-- Sidebar --}}
-        <div class="col-lg-4">
-
-
-            <div class="card shadow-sm border-0 mb-4">
-
-                <div class="card-header bg-white">
-                    <h5>
-                        Pengumuman
-                    </h5>
-                </div>
-
-
-                <div class="card-body">
-
-
-                    @forelse($pengumuman as $item)
-
-
-                    <div class="mb-3">
-
-                        <strong>
-                            {{ $item->judul }}
-                        </strong>
-
-
-                        <p class="mb-1 text-muted">
-                            {{ $item->isi }}
+                        <p class="text-gray-500 mt-2">
+                            {{ auth()->user()->email }}
                         </p>
-
-
-                        <small>
-                            {{ $item->created_at->format('d M Y') }}
-                        </small>
-
 
                     </div>
 
-
-                    <hr>
-
-
-                    @empty
-
-
-                    <p>
-                        Tidak ada pengumuman.
-                    </p>
-
-
-                    @endforelse
-
-
                 </div>
 
             </div>
-
-
-
-            <div class="card shadow-sm border-0">
-
-
-                <div class="card-header bg-white">
-
-                    <h5>
-                        Profil Peserta
-                    </h5>
-
-                </div>
-
-
-
-                <div class="card-body text-center">
-
-
-                    <img src="https://ui-avatars.com/api/?name={{ auth()->user()->name }}"
-                         class="rounded-circle mb-3">
-
-
-
-                    <h5>
-                        {{ auth()->user()->name }}
-                    </h5>
-
-
-
-                    <p class="text-muted">
-                        {{ auth()->user()->email }}
-                    </p>
-
-
-                </div>
-
-
-            </div>
-
 
         </div>
 
-
     </div>
 
-
-</div>
-@endsection
+</x-app-layout>
