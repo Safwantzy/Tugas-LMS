@@ -8,14 +8,12 @@ use App\Models\Enrollment;
 class Kursus extends Model
 {
     protected $table = 'kursus';
-
-    protected $fillable = [
-        'judul',
-        'deskripsi',
-        'category_id',
-    ];
-
-
+protected $fillable = [
+    'judul',
+    'deskripsi',
+    'kategori',
+    'thumbnail',
+];
     public function enrollments()
     {
         return $this->hasMany(Enrollment::class);

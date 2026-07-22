@@ -51,16 +51,17 @@ Route::middleware(['auth','role:admin'])->group(function(){
 |--------------------------------------------------------------------------
 */
 
-Route::middleware(['auth','role:peserta'])->group(function(){
+Route::middleware(['auth','role:peserta'])->group(function () {
 
     Route::get('/peserta/dashboard',
         [ParticipantDashboard::class,'index']
-    )
-    ->name('peserta.dashboard');
+    )->name('peserta.dashboard');
+
+    Route::get('/kursus',
+        [KursusController::class,'catalog']
+    )->name('kursus.catalog');
 
 });
-
-
 /*
 |--------------------------------------------------------------------------
 | Dashboard umum
