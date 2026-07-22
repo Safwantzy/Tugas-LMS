@@ -27,8 +27,7 @@ Route::middleware(['auth','role:admin'])->group(function(){
 
     Route::get('/admin/dashboard',
         [AdminDashboard::class,'index']
-    )
-    ->name('admin.dashboard');
+    )->name('admin.dashboard');
 
 
     Route::resource('category', CategoryController::class);
@@ -39,27 +38,7 @@ Route::middleware(['auth','role:admin'])->group(function(){
 
     Route::get('/enrollment',
         [EnrollmentController::class,'index']
-    )
-    ->name('enrollment.index');
-
-});
-
-
-/*
-|--------------------------------------------------------------------------
-| Peserta
-|--------------------------------------------------------------------------
-*/
-
-Route::middleware(['auth','role:peserta'])->group(function () {
-
-    Route::get('/peserta/dashboard',
-        [ParticipantDashboard::class,'index']
-    )->name('peserta.dashboard');
-
-    Route::get('/kursus',
-        [KursusController::class,'catalog']
-    )->name('kursus.catalog');
+    )->name('enrollment.index');
 
 });
 /*
@@ -71,7 +50,25 @@ Route::middleware(['auth','role:peserta'])->group(function () {
 // hapus route DashboardController lama
 // karena admin sudah memakai /admin/dashboard
 
+/*
+|--------------------------------------------------------------------------
+| Peserta
+|--------------------------------------------------------------------------
+*/
 
+Route::middleware(['auth','role:peserta'])->group(function(){
+
+    Route::get('/peserta/dashboard',
+        [ParticipantDashboard::class,'index']
+    )->name('peserta.dashboard');
+
+
+    // Katalog Kursus Peserta
+    Route::get('/katalog-kursus',
+        [KursusController::class,'catalog']
+    )->name('kursus.catalog');
+
+});
 /*
 |--------------------------------------------------------------------------
 | Kursus

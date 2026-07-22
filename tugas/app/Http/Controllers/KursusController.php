@@ -8,12 +8,33 @@ use Illuminate\Support\Facades\Storage;
 
 class KursusController extends Controller
 {
-    public function index()
-    {
-        $kursus = Kursus::latest()->get();
+public function index(Request $request)
+{
+    $query = Kursus::query();
 
-        return view('kursus.index', compact('kursus'));
+
+    if ($request->filled('search')) {
+        $query->where('judul', 'like', '%' . $request->search . '%');
     }
+
+
+    if ($request->filled('kategori')) {
+        $query->where('kategori', $request->kategori);
+    }
+
+
+    $kursus = $query->latest()
+                    ->paginate(5)
+                    ->withQueryString();
+
+
+    $kategori = Kursus::select('kategori')
+                      ->distinct()
+                      ->pluck('kategori');
+
+
+    return view('kursus.index', compact('kursus', 'kategori'));
+}
 
     // Katalog Kursus untuk Peserta
     public function catalog(Request $request)
