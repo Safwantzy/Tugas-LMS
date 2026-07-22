@@ -17,14 +17,13 @@ return new class extends Migration
                 ->cascadeOnDelete();
 
             $table->foreignId('kursus_id')
-                ->constrained()
+                ->constrained('kursus')
                 ->cascadeOnDelete();
 
             $table->timestamps();
 
         });
     }
-
 
     public function down(): void
     {

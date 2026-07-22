@@ -189,7 +189,7 @@
 
 
 
-            <a href="{{ route('kursus.index') }}"
+           <a href="{{ route('admin.kursus.index') }}"
                 class="bg-green-50 hover:bg-green-100 
                 rounded-2xl p-6 transition">
 

@@ -33,8 +33,8 @@
                         </x-nav-link>
 
                         <x-nav-link
-                            :href="route('kursus.index')"
-                            :active="request()->routeIs('kursus.*')">
+                            :href="route('admin.kursus.index')"
+                            :active="request()->routeIs('admin.kursus.*')">
                             Kursus
                         </x-nav-link>
 
@@ -167,7 +167,7 @@
                     Category
                 </x-responsive-nav-link>
 
-                <x-responsive-nav-link :href="route('kursus.index')">
+                <x-responsive-nav-link :href="route('admin.kursus.index')">
                     Kursus
                 </x-responsive-nav-link>
 
