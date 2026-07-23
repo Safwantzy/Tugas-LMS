@@ -1,116 +1,154 @@
 <x-app-layout>
 
-<x-slot name="header">
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800">
+            Katalog Kursus
+        </h2>
+    </x-slot>
 
-    <h2 class="font-semibold text-xl text-gray-800">
-        Katalog Kursus
-    </h2>
+    <div class="py-12 bg-gray-100 min-h-screen">
 
-</x-slot>
+        <div class="max-w-7xl mx-auto px-6">
 
+            <!-- Search & Filter -->
+            <div class="bg-white rounded-2xl shadow-md p-6 mb-8">
 
-<div class="py-12 bg-gray-100 min-h-screen">
+                <form action="{{ route('kursus.catalog') }}" method="GET">
 
-<div class="max-w-7xl mx-auto px-6">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
 
+                        <!-- Search -->
+                        <div class="md:col-span-2">
+                            <input
+                                type="text"
+                                name="search"
+                                value="{{ request('search') }}"
+                                placeholder="Cari judul kursus..."
+                                class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                        </div>
 
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Filter Kategori -->
+                        <div>
+                            <select
+                                name="kategori"
+                                class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
 
+                                <option value="">Semua Kategori</option>
 
-@forelse($kursus as $item)
+                                @foreach($kategori as $kat)
+                                    <option
+                                        value="{{ $kat }}"
+                                        {{ request('kategori') == $kat ? 'selected' : '' }}>
+                                        {{ $kat }}
+                                    </option>
+                                @endforeach
 
+                            </select>
+                        </div>
 
-<div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                        <!-- Tombol -->
+                        <div class="flex gap-2">
 
+                            <button
+                                type="submit"
+                                class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-lg">
 
-@if($item->thumbnail)
+                                Cari
 
-<img src="{{ asset('storage/'.$item->thumbnail) }}"
-class="w-full h-48 object-cover">
+                            </button>
 
-@else
+                            <a
+                                href="{{ route('kursus.catalog') }}"
+                                class="flex-1 bg-gray-300 hover:bg-gray-400 text-center py-2 rounded-lg">
 
-<div class="h-48 bg-gray-200 flex items-center justify-center">
+                                Reset
 
-Tidak ada gambar
+                            </a>
 
-</div>
+                        </div>
 
-@endif
+                    </div>
 
+                </form>
 
+            </div>
 
-<div class="p-5">
+            <!-- Daftar Kursus -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
+                @forelse($kursus as $item)
 
-<span class="bg-indigo-100 text-indigo-700 
-px-3 py-1 rounded-full text-sm">
+                    <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition">
 
-{{ $item->kategori }}
+                        @if($item->thumbnail)
 
-</span>
+                            <img
+                                src="{{ asset('storage/'.$item->thumbnail) }}"
+                                class="w-full h-48 object-cover">
 
+                        @else
 
+                            <div class="h-48 bg-gray-200 flex items-center justify-center text-gray-500">
 
-<h3 class="text-xl font-bold mt-4">
+                                Tidak ada gambar
 
-{{ $item->judul }}
+                            </div>
 
-</h3>
+                        @endif
 
+                        <div class="p-5">
 
+                            <span class="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm">
 
-<p class="text-gray-600 mt-3">
+                                {{ $item->kategori }}
 
-{{ Str::limit($item->deskripsi,120) }}
+                            </span>
 
-</p>
+                            <h3 class="text-xl font-bold mt-4">
 
+                                {{ $item->judul }}
 
+                            </h3>
 
-<a href="{{ route('kursus.show',$item->id) }}"
-class="block mt-5 bg-indigo-600 
-text-white text-center py-2 rounded-xl">
+                            <p class="text-gray-600 mt-3">
 
-Lihat Detail
+                                {{ Str::limit($item->deskripsi, 120) }}
 
-</a>
+                            </p>
 
+                            <a
+                                href="{{ route('kursus.show', $item->id) }}"
+                                class="block mt-5 bg-indigo-600 hover:bg-indigo-700 text-white text-center py-2 rounded-xl">
 
-</div>
+                                Lihat Detail
 
+                            </a>
 
-</div>
+                        </div>
 
+                    </div>
 
-@empty
+                @empty
 
+                    <div class="col-span-3 bg-white p-10 rounded-xl text-center text-gray-500">
 
-<div class="col-span-3 bg-white p-10 rounded-xl text-center">
+                        Tidak ada kursus yang ditemukan.
 
-Belum ada kursus tersedia
+                    </div>
 
-</div>
+                @endforelse
 
+            </div>
 
-@endforelse
+            <!-- Pagination -->
+            <div class="mt-8">
 
+                {{ $kursus->links() }}
 
-</div>
+            </div>
 
+        </div>
 
-
-<div class="mt-8">
-
-{{ $kursus->links() }}
-
-</div>
-
-
-
-</div>
-
-</div>
-
+    </div>
 
 </x-app-layout>

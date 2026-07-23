@@ -13,6 +13,7 @@ class Kursus extends Model
     protected $table = 'kursus';
 
 
+
     protected $fillable = [
 
         'judul',
@@ -24,6 +25,9 @@ class Kursus extends Model
 
 
 
+    /**
+     * Relasi ke tabel enrollment
+     */
     public function enrollments()
     {
         return $this->hasMany(
@@ -34,6 +38,24 @@ class Kursus extends Model
 
 
 
+    /**
+     * Relasi peserta yang mengikuti kursus
+     */
+    public function peserta()
+    {
+        return $this->belongsToMany(
+            User::class,
+            'enrollments',
+            'kursus_id',
+            'user_id'
+        );
+    }
+
+
+
+    /**
+     * Alias users (opsional)
+     */
     public function users()
     {
         return $this->belongsToMany(
@@ -43,4 +65,5 @@ class Kursus extends Model
             'user_id'
         );
     }
+
 }

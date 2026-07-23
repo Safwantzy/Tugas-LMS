@@ -7,62 +7,155 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+
+    /**
+     * Menampilkan semua kategori
+     */
     public function index()
     {
-        $categories = Category::all();
+        $categories = Category::latest()->get();
 
-        return view('category.index', compact('categories'));
+        return view(
+            'category.index',
+            compact('categories')
+        );
     }
 
 
+
+    /**
+     * Form tambah kategori
+     */
     public function create()
     {
         return view('category.create');
     }
 
 
-   public function store(Request $request)
-{
-
-    $request->validate([
-        'name'=>'required'
-    ]);
 
 
-    Category::create([
-        'name'=>$request->name
-    ]);
+    /**
+     * Simpan kategori baru
+     */
+    public function store(Request $request)
+    {
+
+        $data = $request->validate([
+
+            'name' => [
+                'required',
+                'string',
+                'max:100'
+            ],
+
+        ]);
 
 
-    return redirect()
-        ->route('category.index');
 
-}
+        Category::create($data);
 
+
+
+        return redirect()
+
+            ->route('category.index')
+
+            ->with(
+                'success',
+                'Kategori berhasil ditambahkan.'
+            );
+
+    }
+
+
+
+
+    /**
+     * Detail kategori
+     */
+    public function show(Category $category)
+    {
+        return view(
+            'category.show',
+            compact('category')
+        );
+    }
+
+
+
+
+
+    /**
+     * Form edit kategori
+     */
     public function edit(Category $category)
     {
-        return view('category.edit', compact('category'));
+        return view(
+            'category.edit',
+            compact('category')
+        );
     }
 
 
+
+
+
+    /**
+     * Update kategori
+     */
     public function update(Request $request, Category $category)
     {
-        $request->validate([
-            'name'=>'required'
+
+        $data = $request->validate([
+
+            'name' => [
+                'required',
+                'string',
+                'max:100'
+            ],
+
         ]);
 
-        $category->update([
-            'name'=>$request->name
-        ]);
 
-        return redirect('/category');
+
+        $category->update($data);
+
+
+
+        return redirect()
+
+            ->route('category.index')
+
+            ->with(
+                'success',
+                'Kategori berhasil diperbarui.'
+            );
+
     }
 
 
+
+
+
+    /**
+     * Hapus kategori
+     */
     public function destroy(Category $category)
     {
+
         $category->delete();
 
-        return redirect('/category');
+
+
+        return redirect()
+
+            ->route('category.index')
+
+            ->with(
+                'success',
+                'Kategori berhasil dihapus.'
+            );
+
     }
+
 }

@@ -9,47 +9,62 @@ use Illuminate\Support\Facades\Storage;
 class KursusController extends Controller
 {
 
-    /*
-    |--------------------------------------------------------------------------
-    | ADMIN - DAFTAR KURSUS
-    |--------------------------------------------------------------------------
-    */
 
+    /**
+     * Filter kursus
+     */
+    private function filterKursus(Request $request)
+    {
+        return Kursus::query()
+
+            ->when($request->filled('search'), function ($query) use ($request) {
+
+                $query->where(
+                    'judul',
+                    'like',
+                    '%' . $request->search . '%'
+                );
+
+            })
+
+            ->when($request->filled('kategori'), function ($query) use ($request) {
+
+                $query->where(
+                    'kategori',
+                    $request->kategori
+                );
+
+            });
+    }
+
+
+
+
+
+    /**
+     * ADMIN LIST
+     */
     public function index(Request $request)
     {
-        $query = Kursus::query();
 
+        $kursus = $this->filterKursus($request)
 
-        if ($request->filled('search')) {
-
-            $query->where(
-                'judul',
-                'like',
-                '%' . $request->search . '%'
-            );
-
-        }
-
-
-        if ($request->filled('kategori')) {
-
-            $query->where(
-                'kategori',
-                $request->kategori
-            );
-
-        }
-
-
-        $kursus = $query
             ->latest()
+
             ->paginate(10)
+
             ->withQueryString();
 
 
+
         $kategori = Kursus::select('kategori')
+
             ->distinct()
+
+            ->orderBy('kategori')
+
             ->pluck('kategori');
+
 
 
         return view(
@@ -59,51 +74,37 @@ class KursusController extends Controller
                 'kategori'
             )
         );
+
     }
 
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | PESERTA - KATALOG KURSUS
-    |--------------------------------------------------------------------------
-    */
 
+
+    /**
+     * PESERTA KATALOG
+     */
     public function catalog(Request $request)
     {
-        $query = Kursus::query();
 
+        $kursus = $this->filterKursus($request)
 
-        if ($request->filled('search')) {
-
-            $query->where(
-                'judul',
-                'like',
-                '%' . $request->search . '%'
-            );
-
-        }
-
-
-        if ($request->filled('kategori')) {
-
-            $query->where(
-                'kategori',
-                $request->kategori
-            );
-
-        }
-
-
-        $kursus = $query
             ->latest()
+
             ->paginate(9)
+
             ->withQueryString();
 
 
+
         $kategori = Kursus::select('kategori')
+
             ->distinct()
+
+            ->orderBy('kategori')
+
             ->pluck('kategori');
+
 
 
         return view(
@@ -113,16 +114,16 @@ class KursusController extends Controller
                 'kategori'
             )
         );
+
     }
 
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | ADMIN CREATE
-    |--------------------------------------------------------------------------
-    */
 
+
+    /**
+     * CREATE
+     */
     public function create()
     {
         return view('admin.kursus.create');
@@ -130,53 +131,52 @@ class KursusController extends Controller
 
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | ADMIN SIMPAN KURSUS
-    |--------------------------------------------------------------------------
-    */
 
+
+    /**
+     * STORE
+     */
     public function store(Request $request)
     {
 
-        $request->validate([
+        $data = $request->validate([
 
-            'judul' => 'required',
+            'judul' =>
+            'required|string|max:255',
 
-            'deskripsi' => 'required',
+            'deskripsi' =>
+            'required|string',
 
-            'kategori' => 'required',
+            'kategori' =>
+            'required|string|max:100',
 
-            'thumbnail' => 'nullable|image|max:2048',
+            'thumbnail' =>
+            'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
 
         ]);
 
 
 
-        $thumbnail = null;
-
-
         if ($request->hasFile('thumbnail')) {
 
-            $thumbnail = $request
-                ->file('thumbnail')
-                ->store('thumbnail','public');
+            $file = $request->file('thumbnail');
+
+
+            if ($file->isValid()) {
+
+                $data['thumbnail'] =
+                    $file->store(
+                        'thumbnail',
+                        'public'
+                    );
+
+            }
 
         }
 
 
 
-        Kursus::create([
-
-            'judul' => $request->judul,
-
-            'deskripsi' => $request->deskripsi,
-
-            'kategori' => $request->kategori,
-
-            'thumbnail' => $thumbnail,
-
-        ]);
+        Kursus::create($data);
 
 
 
@@ -194,102 +194,112 @@ class KursusController extends Controller
 
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | DETAIL KURSUS
-    |--------------------------------------------------------------------------
-    */
 
+    /**
+     * SHOW
+     */
     public function show(Kursus $kursus)
     {
+
+        $kursus->load('users');
+
+
         return view(
             'kursus.show',
             compact('kursus')
         );
+
     }
 
 
 
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | ADMIN EDIT
-    |--------------------------------------------------------------------------
-    */
-
+    /**
+     * EDIT
+     */
     public function edit(Kursus $kursus)
     {
+
         return view(
             'admin.kursus.edit',
             compact('kursus')
         );
+
     }
 
 
 
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | ADMIN UPDATE
-    |--------------------------------------------------------------------------
-    */
-
+    /**
+     * UPDATE
+     */
     public function update(Request $request, Kursus $kursus)
     {
 
-        $request->validate([
+        $data = $request->validate([
 
-            'judul' => 'required',
+            'judul' =>
+            'required|string|max:255',
 
-            'deskripsi' => 'required',
+            'deskripsi' =>
+            'required|string',
 
-            'kategori' => 'required',
+            'kategori' =>
+            'required|string|max:100',
 
-            'thumbnail' => 'nullable|image|max:2048',
+            'thumbnail' =>
+            'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
 
         ]);
 
 
 
-        $thumbnail = $kursus->thumbnail;
-
-
+        /*
+        Update thumbnail jika ada upload baru
+        */
 
         if ($request->hasFile('thumbnail')) {
 
 
-            if ($thumbnail) {
+            $file = $request->file('thumbnail');
 
-                Storage::disk('public')
-                    ->delete($thumbnail);
+
+            if ($file->isValid()) {
+
+
+
+                // hapus gambar lama
+
+                if (
+                    !empty($kursus->thumbnail) &&
+                    Storage::disk('public')
+                        ->exists($kursus->thumbnail)
+                ) {
+
+                    Storage::disk('public')
+                        ->delete($kursus->thumbnail);
+
+                }
+
+
+
+                // simpan gambar baru
+
+                $data['thumbnail'] =
+                    $file->store(
+                        'thumbnail',
+                        'public'
+                    );
 
             }
-
-
-
-            $thumbnail = $request
-                ->file('thumbnail')
-                ->store('thumbnail','public');
 
         }
 
 
 
-
-        $kursus->update([
-
-            'judul' => $request->judul,
-
-            'deskripsi' => $request->deskripsi,
-
-            'kategori' => $request->kategori,
-
-            'thumbnail' => $thumbnail,
-
-        ]);
-
+        $kursus->update($data);
 
 
 
@@ -308,16 +318,14 @@ class KursusController extends Controller
 
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | PESERTA ENROLL
-    |--------------------------------------------------------------------------
-    */
-
+    /**
+     * ENROLL PESERTA
+     */
     public function enroll(Kursus $kursus)
     {
 
-        auth()->user()
+        auth()
+            ->user()
             ->kursus()
             ->syncWithoutDetaching([
                 $kursus->id
@@ -338,17 +346,17 @@ class KursusController extends Controller
 
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | ADMIN DELETE
-    |--------------------------------------------------------------------------
-    */
-
+    /**
+     * DELETE
+     */
     public function destroy(Kursus $kursus)
     {
 
-
-        if ($kursus->thumbnail) {
+        if (
+            !empty($kursus->thumbnail) &&
+            Storage::disk('public')
+                ->exists($kursus->thumbnail)
+        ) {
 
             Storage::disk('public')
                 ->delete($kursus->thumbnail);
@@ -358,7 +366,6 @@ class KursusController extends Controller
 
 
         $kursus->delete();
-
 
 
 
@@ -372,5 +379,6 @@ class KursusController extends Controller
             );
 
     }
+
 
 }

@@ -13,7 +13,7 @@ use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
-| Halaman Awal
+| HALAMAN AWAL
 |--------------------------------------------------------------------------
 */
 
@@ -21,19 +21,31 @@ Route::get('/', function () {
 
     if (auth()->check()) {
 
+
         if (auth()->user()->role === 'admin') {
-            return redirect()->route('admin.dashboard');
+
+            return redirect()
+                ->route('admin.dashboard');
+
         }
 
+
+
         if (auth()->user()->role === 'peserta') {
-            return redirect()->route('peserta.dashboard');
+
+            return redirect()
+                ->route('peserta.dashboard');
+
         }
 
     }
 
+
     return view('welcome');
 
 });
+
+
 
 
 
@@ -44,55 +56,105 @@ Route::get('/', function () {
 */
 
 Route::middleware(['auth','role:admin'])
+
     ->prefix('admin')
+
     ->group(function () {
 
 
+
         /*
+        |--------------------------------------------------------------------------
         | Dashboard Admin
+        |--------------------------------------------------------------------------
         */
 
         Route::get('/dashboard',
             [AdminDashboard::class,'index']
-        )->name('admin.dashboard');
+        )
+        ->name('admin.dashboard');
+
+
 
 
 
         /*
+        |--------------------------------------------------------------------------
         | Category CRUD
+        |--------------------------------------------------------------------------
         */
 
-        Route::resource('category', CategoryController::class);
+        Route::resource(
+            'category',
+            CategoryController::class
+        );
+
+
+
 
 
 
         /*
-        | Kursus CRUD Admin
+        |--------------------------------------------------------------------------
+        | Kursus CRUD
+        |--------------------------------------------------------------------------
         */
 
-        Route::resource('kursus', KursusController::class)
-            ->names([
-                'index'   => 'admin.kursus.index',
-                'create'  => 'admin.kursus.create',
-                'store'   => 'admin.kursus.store',
-                'show'    => 'admin.kursus.show',
-                'edit'    => 'admin.kursus.edit',
-                'update'  => 'admin.kursus.update',
-                'destroy' => 'admin.kursus.destroy',
-            ]);
+        Route::resource(
+            'kursus',
+            KursusController::class
+        )
+        ->parameters([
+            'kursus' => 'kursus'
+        ])
+        ->names([
+
+            'index' =>
+                'admin.kursus.index',
+
+            'create' =>
+                'admin.kursus.create',
+
+            'store' =>
+                'admin.kursus.store',
+
+            'show' =>
+                'admin.kursus.show',
+
+            'edit' =>
+                'admin.kursus.edit',
+
+            'update' =>
+                'admin.kursus.update',
+
+            'destroy' =>
+                'admin.kursus.destroy',
+
+        ]);
+
+
+
+
 
 
 
         /*
+        |--------------------------------------------------------------------------
         | Enrollment Admin
+        |--------------------------------------------------------------------------
         */
 
         Route::get('/enrollment',
             [EnrollmentController::class,'index']
-        )->name('enrollment.index');
+        )
+        ->name('enrollment.index');
 
 
     });
+
+
+
+
 
 
 
@@ -104,29 +166,42 @@ Route::middleware(['auth','role:admin'])
 |--------------------------------------------------------------------------
 */
 
+
 Route::middleware(['auth','role:peserta'])
+
     ->prefix('peserta')
+
     ->group(function () {
 
 
 
         /*
+        |--------------------------------------------------------------------------
         | Dashboard Peserta
+        |--------------------------------------------------------------------------
         */
 
         Route::get('/dashboard',
             [ParticipantDashboard::class,'index']
-        )->name('peserta.dashboard');
+        )
+        ->name('peserta.dashboard');
+
+
+
 
 
 
         /*
+        |--------------------------------------------------------------------------
         | Katalog Kursus
+        |--------------------------------------------------------------------------
         */
 
         Route::get('/katalog-kursus',
             [KursusController::class,'catalog']
-        )->name('kursus.catalog');
+        )
+        ->name('kursus.catalog');
+
 
 
     });
@@ -135,25 +210,37 @@ Route::middleware(['auth','role:peserta'])
 
 
 
+
+
+
+
 /*
 |--------------------------------------------------------------------------
-| Detail Kursus & Enrollment
+| DETAIL KURSUS & ENROLLMENT
 |--------------------------------------------------------------------------
 */
 
+
 Route::middleware('auth')
+
     ->group(function () {
+
 
 
         Route::get('/kursus/{kursus}',
             [KursusController::class,'show']
-        )->name('kursus.show');
+        )
+        ->name('kursus.show');
+
+
 
 
 
         Route::post('/kursus/{kursus}/enroll',
             [KursusController::class,'enroll']
-        )->name('kursus.enroll');
+        )
+        ->name('kursus.enroll');
+
 
 
     });
@@ -162,31 +249,46 @@ Route::middleware('auth')
 
 
 
+
+
+
+
 /*
 |--------------------------------------------------------------------------
-| Profile
+| PROFILE
 |--------------------------------------------------------------------------
 */
 
+
 Route::middleware('auth')
+
     ->group(function () {
+
 
 
         Route::get('/profile',
             [ProfileController::class,'edit']
-        )->name('profile.edit');
+        )
+        ->name('profile.edit');
+
+
 
 
 
         Route::patch('/profile',
             [ProfileController::class,'update']
-        )->name('profile.update');
+        )
+        ->name('profile.update');
+
+
 
 
 
         Route::delete('/profile',
             [ProfileController::class,'destroy']
-        )->name('profile.destroy');
+        )
+        ->name('profile.destroy');
+
 
 
     });
@@ -195,9 +297,13 @@ Route::middleware('auth')
 
 
 
+
+
+
+
 /*
 |--------------------------------------------------------------------------
-| Authentication Routes
+| AUTH
 |--------------------------------------------------------------------------
 */
 
