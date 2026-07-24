@@ -1,151 +1,210 @@
 <x-app-layout>
 
-<x-slot name="header">
-    <h2 class="font-semibold text-xl text-gray-800">
-        Edit Kursus
-    </h2>
-</x-slot>
+    <x-slot name="header">
+        <div class="flex items-center justify-between">
 
+            <div>
 
-<div class="py-12 bg-gray-100 min-h-screen">
+                <h2 class="text-3xl font-bold text-gray-800">
+                    ✏️ Edit Kursus
+                </h2>
 
-<div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-8">
+                <p class="text-gray-500 mt-1">
+                    Perbarui informasi kursus dan thumbnail.
+                </p>
 
+            </div>
 
-@if($errors->any())
+            <a href="{{ route('admin.kursus.index') }}"
+                class="px-5 py-3 rounded-xl border border-gray-300 hover:bg-gray-100 transition">
 
-<div class="bg-red-100 text-red-700 p-4 rounded-lg mb-5">
+                ← Kembali
 
-<ul>
+            </a>
 
-@foreach($errors->all() as $error)
+        </div>
+    </x-slot>
 
-<li>
-{{ $error }}
-</li>
+    <div class="py-10">
 
-@endforeach
+        <div class="max-w-7xl mx-auto px-6">
 
-</ul>
+            @if($errors->any())
 
-</div>
+                <div class="mb-8 rounded-2xl border border-red-200 bg-red-50 p-5">
 
-@endif
+                    <h3 class="font-semibold text-red-700 mb-3">
+                        Terjadi Kesalahan
+                    </h3>
 
+                    <ul class="list-disc list-inside text-red-600 space-y-1">
 
+                        @foreach($errors->all() as $error)
 
-<form action="{{ route('admin.kursus.update',$kursus->id) }}"
-method="POST"
-enctype="multipart/form-data">
+                            <li>{{ $error }}</li>
 
+                        @endforeach
 
-@csrf
+                    </ul>
 
-@method('PUT')
+                </div>
 
+            @endif
 
+            <form
+                action="{{ route('admin.kursus.update',$kursus->id) }}"
+                method="POST"
+                enctype="multipart/form-data">
 
-<div class="mb-5">
+                @csrf
+                @method('PUT')
 
-<label class="block font-semibold mb-2">
-Judul Kursus
-</label>
+                <div class="grid lg:grid-cols-3 gap-8">
 
-<input type="text"
-name="judul"
-value="{{ old('judul',$kursus->judul) }}"
-class="w-full border rounded-xl p-3">
+                    {{-- Preview --}}
+                    <div>
 
-</div>
+                        <div class="bg-white rounded-3xl shadow-xl border border-gray-100 p-6 sticky top-24">
 
+                            <h3 class="font-bold text-xl text-gray-800 mb-5">
+                                Preview
+                            </h3>
 
+                            @if($kursus->thumbnail)
 
+                                <img
+                                    src="{{ asset('storage/'.$kursus->thumbnail) }}"
+                                    class="rounded-2xl w-full h-60 object-cover shadow">
 
-<div class="mb-5">
+                            @else
 
-<label class="block font-semibold mb-2">
-Deskripsi
-</label>
+                                <div
+                                    class="rounded-2xl h-60 bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center text-7xl text-white">
 
-<textarea
-name="deskripsi"
-rows="5"
-class="w-full border rounded-xl p-3">{{ old('deskripsi',$kursus->deskripsi) }}</textarea>
+                                    📚
 
-</div>
+                                </div>
 
+                            @endif
 
+                            <div class="mt-6">
 
+                                <h4 class="text-xl font-bold text-gray-800">
 
-<div class="mb-5">
+                                    {{ $kursus->judul }}
 
-<label class="block font-semibold mb-2">
-Kategori
-</label>
+                                </h4>
 
-<input type="text"
-name="kategori"
-value="{{ old('kategori',$kursus->kategori) }}"
-class="w-full border rounded-xl p-3">
+                                <span
+                                    class="inline-block mt-3 px-4 py-1 rounded-full bg-indigo-100 text-indigo-700 text-sm">
 
-</div>
+                                    {{ $kursus->kategori }}
 
+                                </span>
 
+                            </div>
 
+                        </div>
 
-<div class="mb-5">
+                    </div>
 
-<label class="block font-semibold mb-2">
-Thumbnail Saat Ini
-</label>
+                    {{-- Form --}}
+                    <div class="lg:col-span-2">
 
+                        <div class="bg-white rounded-3xl shadow-xl border border-gray-100 p-8">
 
-@if($kursus->thumbnail)
+                            <div class="space-y-6">
 
-<img src="{{ asset('storage/'.$kursus->thumbnail) }}"
-class="w-48 h-32 object-cover rounded-xl mb-4">
+                                <div>
 
+                                    <label class="block mb-2 font-semibold text-gray-700">
+                                        Judul Kursus
+                                    </label>
 
-@else
+                                    <input
+                                        type="text"
+                                        name="judul"
+                                        value="{{ old('judul',$kursus->judul) }}"
+                                        class="w-full rounded-xl border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
 
-<p class="text-gray-500">
-Tidak ada thumbnail
-</p>
+                                </div>
 
-@endif
+                                <div>
 
+                                    <label class="block mb-2 font-semibold text-gray-700">
+                                        Deskripsi
+                                    </label>
 
+                                    <textarea
+                                        rows="6"
+                                        name="deskripsi"
+                                        class="w-full rounded-xl border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">{{ old('deskripsi',$kursus->deskripsi) }}</textarea>
 
-<label class="block font-semibold mb-2">
-Upload Thumbnail Baru
-</label>
+                                </div>
 
+                                <div>
 
-<input type="file"
-name="thumbnail"
-class="w-full border rounded-xl p-3">
+                                    <label class="block mb-2 font-semibold text-gray-700">
+                                        Kategori
+                                    </label>
 
+                                    <input
+                                        type="text"
+                                        name="kategori"
+                                        value="{{ old('kategori',$kursus->kategori) }}"
+                                        class="w-full rounded-xl border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
 
-</div>
+                                </div>
 
+                                <div>
 
+                                    <label class="block mb-2 font-semibold text-gray-700">
+                                        Thumbnail Baru
+                                    </label>
 
+                                    <input
+                                        type="file"
+                                        name="thumbnail"
+                                        class="w-full rounded-xl border border-dashed border-indigo-300 p-4">
 
-<button type="submit"
-class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl">
+                                    <p class="text-sm text-gray-500 mt-2">
+                                        Kosongkan jika tidak ingin mengganti gambar.
+                                    </p>
 
-Update Kursus
+                                </div>
 
-</button>
+                            </div>
 
+                            <div class="flex justify-end gap-4 mt-10">
 
+                                <a
+                                    href="{{ route('admin.kursus.index') }}"
+                                    class="px-6 py-3 rounded-xl border border-gray-300 hover:bg-gray-100 transition">
 
-</form>
+                                    Batal
 
+                                </a>
 
-</div>
+                                <button
+                                    type="submit"
+                                    class="px-8 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold shadow-lg hover:shadow-xl hover:scale-105 transition">
 
-</div>
+                                    💾 Simpan Perubahan
 
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
 
 </x-app-layout>

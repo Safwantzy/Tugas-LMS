@@ -23,6 +23,7 @@ class RegisteredUserController extends Controller
         return view('auth.register');
     }
 
+
     /**
      * Handle an incoming registration request.
      *
@@ -30,22 +31,62 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+
+            'name' => [
+                'required',
+                'string',
+                'max:255'
+            ],
+
+            'email' => [
+                'required',
+                'string',
+                'lowercase',
+                'email',
+                'max:255',
+                'unique:' . User::class
+            ],
+
+            'password' => [
+                'required',
+                'confirmed',
+                Rules\Password::defaults()
+            ],
+
         ]);
 
+
+
+        // Membuat akun baru
         $user = User::create([
+
             'name' => $request->name,
+
             'email' => $request->email,
+
             'password' => Hash::make($request->password),
+
+            // User baru otomatis menjadi peserta
+            'role' => 'peserta',
+
         ]);
 
+
+
+        // Event registrasi
         event(new Registered($user));
 
+
+
+        // Login otomatis setelah daftar
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+
+
+        // Arahkan ke dashboard peserta
+        return redirect()->route('peserta.dashboard');
+
     }
 }

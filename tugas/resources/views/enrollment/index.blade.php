@@ -1,12 +1,32 @@
 <x-app-layout>
 
+
 <x-slot name="header">
 
-    <h2 class="font-semibold text-xl text-gray-800">
-        Data Enrollment
-    </h2>
+<div class="flex items-center justify-between">
+
+    <div>
+
+        <h2 class="text-3xl font-bold text-gray-800">
+
+            🎓 Data Enrollment
+
+        </h2>
+
+        <p class="text-gray-500 mt-1">
+
+            Kelola peserta yang mengikuti kursus.
+
+        </p>
+
+    </div>
+
+
+</div>
 
 </x-slot>
+
+
 
 
 
@@ -17,308 +37,550 @@
 
 
 
-    <!-- Header -->
 
-    <div class="bg-gradient-to-r from-indigo-600 to-blue-600 rounded-3xl shadow-xl p-8 text-white mb-8">
 
+{{-- HERO --}}
 
-        <div class="flex flex-col md:flex-row justify-between items-center">
+<div class="relative overflow-hidden bg-gradient-to-r 
+from-indigo-600 via-blue-600 to-purple-700
+rounded-3xl shadow-2xl p-10 text-white mb-10">
 
 
-            <div>
+<div class="absolute right-10 top-5 text-[150px] opacity-20">
 
-                <h1 class="text-3xl font-bold">
-                    Manajemen Enrollment 🎓
-                </h1>
+🎓
 
+</div>
 
-                <p class="mt-2 text-blue-100">
-                    Pantau peserta yang mengikuti setiap kursus.
-                </p>
 
-            </div>
 
+<div class="relative">
 
 
-            <div class="mt-5 md:mt-0 bg-white/20 backdrop-blur rounded-2xl px-6 py-4 text-center">
+<h1 class="text-5xl font-extrabold">
 
+Manajemen Enrollment
 
-                <p class="text-sm text-blue-100">
-                    Total Kursus
-                </p>
+</h1>
 
 
-                <p class="text-3xl font-bold">
-                    {{ $kursus->count() }}
-                </p>
+<p class="mt-3 text-indigo-100 text-lg">
 
+Pantau perkembangan peserta dalam setiap kursus.
 
-            </div>
+</p>
 
 
-        </div>
+</div>
 
 
-    </div>
 
+</div>
 
 
 
 
-    <!-- Table Card -->
 
-    <div class="bg-white/90 backdrop-blur rounded-3xl shadow-xl overflow-hidden">
 
 
-        <div class="px-6 py-5 border-b">
+{{-- STATISTIC --}}
 
+<div class="grid md:grid-cols-3 gap-6 mb-10">
 
-            <h2 class="text-xl font-bold text-gray-800">
 
-                📚 Daftar Peserta Kursus
 
-            </h2>
+<div class="bg-white rounded-3xl shadow-xl p-6 border">
 
 
-        </div>
+<div class="flex justify-between">
 
 
+<div>
 
 
+<p class="text-gray-500">
 
-        <div class="overflow-x-auto">
+Total Kursus
 
+</p>
 
-            <table class="min-w-full">
 
+<h2 class="text-4xl font-bold text-indigo-600 mt-3">
 
-                <thead class="bg-gray-100">
+{{ $kursus->count() }}
 
+</h2>
 
-                    <tr>
 
+</div>
 
-                        <th class="px-6 py-4 text-left text-gray-600">
 
-                            Kursus
+<div class="text-5xl">
 
-                        </th>
+📚
 
+</div>
 
-                        <th class="px-6 py-4 text-left text-gray-600">
 
-                            Jumlah Peserta
+</div>
 
-                        </th>
 
+</div>
 
-                        <th class="px-6 py-4 text-left text-gray-600">
 
-                            Peserta Terdaftar
 
-                        </th>
 
 
-                    </tr>
 
 
-                </thead>
+<div class="bg-white rounded-3xl shadow-xl p-6 border">
 
 
+<div class="flex justify-between">
 
-                <tbody class="divide-y">
 
+<div>
 
 
-                @forelse($kursus as $item)
+<p class="text-gray-500">
 
+Total Peserta
 
+</p>
 
-                    <tr class="hover:bg-blue-50 transition">
 
+<h2 class="text-4xl font-bold text-green-600 mt-3">
 
 
-                        <!-- Kursus -->
+{{ $kursus->sum(function($item){
 
-                        <td class="px-6 py-5">
+return $item->peserta->count();
 
+}) }}
 
-                            <div class="flex items-center gap-4">
 
+</h2>
 
-                                @if($item->thumbnail)
 
-                                    <img
-                                    src="{{ asset('storage/'.$item->thumbnail) }}"
-                                    class="w-14 h-14 rounded-xl object-cover shadow">
+</div>
 
 
-                                @else
+<div class="text-5xl">
 
+👨‍🎓
 
-                                    <div class="w-14 h-14 rounded-xl bg-indigo-100 flex items-center justify-center text-2xl">
+</div>
 
-                                        📚
 
-                                    </div>
+</div>
 
 
-                                @endif
+</div>
 
 
 
-                                <div>
 
 
-                                    <h3 class="font-bold text-gray-800">
 
-                                        {{ $item->judul }}
 
-                                    </h3>
+<div class="bg-white rounded-3xl shadow-xl p-6 border">
 
 
-                                    <p class="text-sm text-gray-500">
+<div class="flex justify-between">
 
-                                        {{ $item->kategori }}
 
-                                    </p>
+<div>
 
 
-                                </div>
+<p class="text-gray-500">
 
+Enrollment Aktif
 
-                            </div>
+</p>
 
 
-                        </td>
+<h2 class="text-4xl font-bold text-purple-600 mt-3">
 
 
+{{ $kursus->sum(function($item){
 
+return $item->peserta->count();
 
+}) }}
 
-                        <!-- Jumlah -->
 
-                        <td class="px-6 py-5">
+</h2>
 
 
-                            <span class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full font-semibold">
+</div>
 
 
-                                {{ $item->peserta->count() }} Peserta
+<div class="text-5xl">
 
+🚀
 
-                            </span>
+</div>
 
 
-                        </td>
+</div>
 
 
+</div>
 
 
 
 
-                        <!-- Peserta -->
+</div>
 
-                        <td class="px-6 py-5">
 
 
-                            @forelse($item->peserta as $peserta)
 
 
 
-                                <div class="flex items-center gap-3 mb-3">
 
 
-                                    <img
-                                    src="https://ui-avatars.com/api/?name={{ urlencode($peserta->name) }}&background=4f46e5&color=fff"
-                                    class="w-9 h-9 rounded-full">
 
+{{-- TABLE --}}
 
+<div class="bg-white rounded-3xl shadow-2xl overflow-hidden">
 
-                                    <div>
 
 
-                                        <p class="font-medium text-gray-800">
+<div class="p-7 border-b">
 
-                                            {{ $peserta->name }}
 
-                                        </p>
+<h2 class="text-2xl font-bold text-gray-800">
 
+📋 Daftar Peserta Kursus
 
-                                        <p class="text-xs text-gray-500">
+</h2>
 
-                                            {{ $peserta->email }}
 
-                                        </p>
+<p class="text-gray-500 mt-1">
 
+Informasi peserta berdasarkan kursus yang diikuti.
 
-                                    </div>
+</p>
 
 
-                                </div>
+</div>
 
 
 
-                            @empty
 
 
-                                <span class="text-gray-400 italic">
 
-                                    Belum ada peserta
 
-                                </span>
+<div class="overflow-x-auto">
 
 
-                            @endforelse
+<table class="w-full">
 
 
 
-                        </td>
+<thead class="bg-gray-50">
 
 
+<tr>
 
 
-                    </tr>
+<th class="px-7 py-5 text-left text-gray-600">
 
+Kursus
 
+</th>
 
 
-                @empty
+<th class="px-7 py-5 text-left text-gray-600">
 
+Peserta
 
-                    <tr>
+</th>
 
 
-                        <td colspan="3"
-                            class="text-center py-10 text-gray-500">
+<th class="px-7 py-5 text-left text-gray-600">
 
+Daftar Peserta
 
-                            Belum ada data enrollment.
+</th>
 
 
-                        </td>
+</tr>
 
 
-                    </tr>
+</thead>
 
 
-                @endforelse
 
 
 
 
-                </tbody>
 
 
+<tbody class="divide-y">
 
-            </table>
 
 
-        </div>
+@forelse($kursus as $item)
 
 
 
-    </div>
+<tr class="hover:bg-indigo-50 transition">
+
+
+
+
+
+{{-- COURSE --}}
+
+<td class="px-7 py-6">
+
+
+<div class="flex items-center gap-5">
+
+
+
+@if($item->thumbnail)
+
+
+<img
+src="{{asset('storage/'.$item->thumbnail)}}"
+class="w-20 h-20 rounded-2xl object-cover shadow-lg">
+
+
+@else
+
+
+<div
+class="w-20 h-20 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-4xl text-white">
+
+📚
+
+</div>
+
+
+@endif
+
+
+
+
+
+
+<div>
+
+
+<h3 class="font-bold text-lg text-gray-800">
+
+{{$item->judul}}
+
+</h3>
+
+
+
+<span class="inline-block mt-2 px-3 py-1 rounded-full
+bg-indigo-100 text-indigo-700 text-sm font-semibold">
+
+{{$item->kategori}}
+
+</span>
+
+
+
+</div>
+
+
+</div>
+
+
+
+</td>
+
+
+
+
+
+
+
+
+
+{{-- COUNT --}}
+
+<td class="px-7 py-6">
+
+
+<div class="inline-flex items-center gap-2 
+bg-green-100 text-green-700
+px-5 py-3 rounded-2xl font-bold">
+
+
+👥
+
+{{$item->peserta->count()}}
+
+Peserta
+
+
+</div>
+
+
+</td>
+
+
+
+
+
+
+
+
+
+{{-- USERS --}}
+
+<td class="px-7 py-6">
+
+
+
+@if($item->peserta->count())
+
+
+<div class="space-y-4">
+
+
+@foreach($item->peserta as $peserta)
+
+
+
+<div class="flex items-center gap-4">
+
+
+<img
+src="https://ui-avatars.com/api/?name={{urlencode($peserta->name)}}&background=6366f1&color=fff"
+class="w-12 h-12 rounded-full shadow">
+
+
+<div>
+
+
+<p class="font-semibold text-gray-800">
+
+{{$peserta->name}}
+
+</p>
+
+
+<p class="text-sm text-gray-500">
+
+{{$peserta->email}}
+
+</p>
+
+
+</div>
+
+
+
+</div>
+
+
+
+@endforeach
+
+
+</div>
+
+
+
+@else
+
+
+<div class="flex items-center gap-2 text-gray-400 italic">
+
+
+<span class="text-xl">
+😴
+</span>
+
+
+Belum ada peserta
+
+
+</div>
+
+
+
+@endif
+
+
+
+</td>
+
+
+
+
+
+</tr>
+
+
+
+
+@empty
+
+
+
+
+<tr>
+
+
+<td colspan="3"
+class="py-16 text-center">
+
+
+<div class="text-6xl mb-4">
+
+📭
+
+</div>
+
+
+<h3 class="text-xl font-bold text-gray-700">
+
+Belum ada enrollment
+
+</h3>
+
+
+<p class="text-gray-500">
+
+Data peserta kursus belum tersedia.
+
+</p>
+
+
+</td>
+
+
+</tr>
+
+
+
+
+@endforelse
+
+
+
+
+
+</tbody>
+
+
+</table>
+
+
+
+</div>
+
+
+
+</div>
 
 
 

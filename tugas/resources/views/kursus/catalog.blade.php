@@ -1,71 +1,116 @@
 <x-app-layout>
 
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800">
-            Katalog Kursus
-        </h2>
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+
+            <div>
+                <h2 class="text-3xl font-bold text-gray-800">
+                    📚 Katalog Kursus
+                </h2>
+
+                <p class="text-gray-500 mt-1">
+                    Temukan kursus terbaik untuk meningkatkan kemampuanmu.
+                </p>
+            </div>
+
+        </div>
     </x-slot>
 
-    <div class="py-12 bg-gray-100 min-h-screen">
+    <div class="py-10">
 
         <div class="max-w-7xl mx-auto px-6">
 
-            <!-- Search & Filter -->
-            <div class="bg-white rounded-2xl shadow-md p-6 mb-8">
+            {{-- Hero --}}
+            <div class="mb-10 rounded-3xl overflow-hidden bg-gradient-to-r from-indigo-600 via-blue-600 to-purple-700 p-10 text-white shadow-2xl">
 
-                <form action="{{ route('kursus.catalog') }}" method="GET">
+                <div class="grid lg:grid-cols-2 gap-8 items-center">
 
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div>
 
-                        <!-- Search -->
-                        <div class="md:col-span-2">
-                            <input
-                                type="text"
-                                name="search"
-                                value="{{ request('search') }}"
-                                placeholder="Cari judul kursus..."
-                                class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                        <h1 class="text-4xl lg:text-5xl font-bold leading-tight">
+                            Belajar Skill Baru
+                            Kapan Saja
+                        </h1>
+
+                        <p class="mt-5 text-indigo-100 text-lg">
+                            Jelajahi berbagai kursus profesional
+                            dari mentor terbaik.
+                        </p>
+
+                    </div>
+
+                    <div class="hidden lg:flex justify-center">
+
+                        <div class="text-9xl">
+                            🎓
                         </div>
 
-                        <!-- Filter Kategori -->
-                        <div>
-                            <select
-                                name="kategori"
-                                class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
 
-                                <option value="">Semua Kategori</option>
+                </div>
 
-                                @foreach($kategori as $kat)
-                                    <option
-                                        value="{{ $kat }}"
-                                        {{ request('kategori') == $kat ? 'selected' : '' }}>
-                                        {{ $kat }}
-                                    </option>
-                                @endforeach
+            </div>
 
-                            </select>
-                        </div>
+            {{-- Filter --}}
+            <div class="bg-white rounded-3xl shadow-xl p-8 mb-10 border border-gray-100">
 
-                        <!-- Tombol -->
-                        <div class="flex gap-2">
+                <form method="GET"
+                    action="{{ route('kursus.catalog') }}"
+                    class="grid lg:grid-cols-12 gap-5">
 
-                            <button
-                                type="submit"
-                                class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-lg">
+                    <div class="lg:col-span-6">
 
-                                Cari
+                        <label class="text-sm font-semibold text-gray-700">
+                            Cari Kursus
+                        </label>
 
-                            </button>
+                        <input
+                            type="text"
+                            name="search"
+                            value="{{ request('search') }}"
+                            placeholder="🔍 Cari berdasarkan judul..."
+                            class="mt-2 w-full rounded-xl border-gray-300 focus:ring-indigo-500 focus:border-indigo-500">
 
-                            <a
-                                href="{{ route('kursus.catalog') }}"
-                                class="flex-1 bg-gray-300 hover:bg-gray-400 text-center py-2 rounded-lg">
+                    </div>
 
-                                Reset
+                    <div class="lg:col-span-4">
 
-                            </a>
+                        <label class="text-sm font-semibold text-gray-700">
+                            Kategori
+                        </label>
 
-                        </div>
+                        <select
+                            name="kategori"
+                            class="mt-2 w-full rounded-xl border-gray-300 focus:ring-indigo-500">
+
+                            <option value="">
+                                Semua Kategori
+                            </option>
+
+                            @foreach($kategori as $item)
+
+                                <option
+                                    value="{{ $item }}"
+                                    {{ request('kategori')==$item ? 'selected' : '' }}>
+
+                                    {{ $item }}
+
+                                </option>
+
+                            @endforeach
+
+                        </select>
+
+                    </div>
+
+                    <div class="lg:col-span-2 flex items-end">
+
+                        <button
+                            class="w-full rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 font-semibold shadow-lg hover:scale-105 transition">
+
+                            Cari
+
+                        </button>
 
                     </div>
 
@@ -73,56 +118,78 @@
 
             </div>
 
-            <!-- Daftar Kursus -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {{-- Cards --}}
+            <div class="grid sm:grid-cols-2 xl:grid-cols-3 gap-8">
 
                 @forelse($kursus as $item)
 
-                    <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition">
+                    <div
+                        class="bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-2 transition duration-300">
 
-                        @if($item->thumbnail)
+                        {{-- Thumbnail --}}
+                        <div class="relative">
 
-                            <img
-                                src="{{ asset('storage/'.$item->thumbnail) }}"
-                                class="w-full h-48 object-cover">
+                            @if($item->thumbnail)
 
-                        @else
+                                <img
+                                    src="{{ asset('storage/'.$item->thumbnail) }}"
+                                    class="w-full h-60 object-cover">
 
-                            <div class="h-48 bg-gray-200 flex items-center justify-center text-gray-500">
+                            @else
 
-                                Tidak ada gambar
+                                <div class="h-60 bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center text-7xl text-white">
+                                    📘
+                                </div>
 
-                            </div>
+                            @endif
 
-                        @endif
-
-                        <div class="p-5">
-
-                            <span class="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm">
+                            <span
+                                class="absolute top-4 left-4 bg-white/90 backdrop-blur px-4 py-1 rounded-full text-sm font-semibold text-indigo-600">
 
                                 {{ $item->kategori }}
 
                             </span>
 
-                            <h3 class="text-xl font-bold mt-4">
+                        </div>
+
+                        {{-- Content --}}
+                        <div class="p-6">
+
+                            <h3 class="text-2xl font-bold text-gray-800 line-clamp-2">
 
                                 {{ $item->judul }}
 
                             </h3>
 
-                            <p class="text-gray-600 mt-3">
+                            <p class="mt-4 text-gray-500 line-clamp-3">
 
-                                {{ Str::limit($item->deskripsi, 120) }}
+                                {{ $item->deskripsi }}
 
                             </p>
 
-                            <a
-                                href="{{ route('kursus.show', $item->id) }}"
-                                class="block mt-5 bg-indigo-600 hover:bg-indigo-700 text-white text-center py-2 rounded-xl">
+                            <div class="flex justify-between items-center mt-8">
 
-                                Lihat Detail
+                                <div>
 
-                            </a>
+                                    <p class="text-xs text-gray-400">
+                                        Kategori
+                                    </p>
+
+                                    <p class="font-semibold text-indigo-600">
+                                        {{ $item->kategori }}
+                                    </p>
+
+                                </div>
+
+                                <a
+                                    href="{{ route('kursus.show',$item->id) }}"
+                                    class="px-5 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold hover:shadow-xl transition">
+
+                                    Detail →
+
+                                </a>
+
+                            </div>
 
                         </div>
 
@@ -130,9 +197,23 @@
 
                 @empty
 
-                    <div class="col-span-3 bg-white p-10 rounded-xl text-center text-gray-500">
+                    <div class="col-span-full">
 
-                        Tidak ada kursus yang ditemukan.
+                        <div class="bg-white rounded-3xl shadow-xl p-16 text-center">
+
+                            <div class="text-7xl mb-6">
+                                📚
+                            </div>
+
+                            <h2 class="text-3xl font-bold text-gray-700">
+                                Kursus Tidak Ditemukan
+                            </h2>
+
+                            <p class="mt-3 text-gray-500">
+                                Coba ubah kata kunci pencarian atau pilih kategori lain.
+                            </p>
+
+                        </div>
 
                     </div>
 
@@ -140,8 +221,8 @@
 
             </div>
 
-            <!-- Pagination -->
-            <div class="mt-8">
+            {{-- Pagination --}}
+            <div class="mt-12">
 
                 {{ $kursus->links() }}
 
